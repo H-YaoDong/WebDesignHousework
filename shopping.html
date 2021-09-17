@@ -1,0 +1,269 @@
+<!--
+完成此作业时遇到的问题:
+	1. div 与 img 之间的间隔问题
+	2. 上边距溢出问题
+	3. 多行文字在div内居中
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>球鞋</title>
+	<link rel="stylesheet" type="text/css" href="css/shopping.css">
+	<base target="_blank" />
+	<style>
+		#wrap {position:relative;margin:0 auto;width:980;height:380px;background-color: grey;}
+		#wrap .banner {position:absolute;top:0;width:100%;height:100%;opacity:0;transition: opacity 2s;}
+		#wrap .tab{position:absolute;bottom:10px;right:80px;}
+    	#wrap .tab span{display: inline-block;width:6px;height:6px;margin:3px;background:rgba(105,105,105,0.5);border-radius:50%;cursor: pointer;border:2px solid #887B6E;}
+    	#wrap .tab span.on{background:#E2CEB7;}
+    	#wrap .tab span:hover{background:#E2CEB7;}
+		#wrap .prev {position:absolute;left:80px;top:200px;width:41px;height:69px;background: url("../web/images/icon-slides.png") 82px;cursor:pointer;}
+		#wrap .prev:hover{background: url("images/icon-slides.png");} 
+
+		#wrap .next {position:absolute;right:80px;top:200px;width:41px;height:69px;background: url("../web/images/icon-slides.png") 41px;cursor:pointer;}
+		#wrap .next:hover{background: url("images/icon-slides.png") 123px;}
+	</style>
+</head>
+<body>
+	<div class="nav">
+		<div class="logo">
+			<!-- <img src="images/james_15.jpg"> -->
+		</div>
+		<ul>
+			<li><a href="james_introduce.html">博客</a></li>
+			<li><a href="#">球鞋</a></li>
+			<li><a href="james.html">詹姆斯</a></li>
+			<li><a href="about.html">关于</a></li>
+			<li><a href="index.html">首页</a></li>
+		</ul>
+	</div>
+
+	<div class="header"></div>
+
+	<div class="main">
+		<div id="wrap">
+			<div class="banner" style="opacity: 0;">
+				<div class="banner-img">
+					<img src="images/james_clothes_01.jpg" width="980" height="380" alt="轮播图1">
+				</div>
+			</div>
+			
+			<div class="banner" style="opacity: 1;">
+				<div class="banner-img">
+					<img src="images/james_clothes_02.jpg" width="980" height="380" alt="轮播图1">
+				</div>
+			</div>
+			
+			<div class="banner" style="opacity: 0;">
+				<div class="banner-img">
+					<img src="images/james_clothes_03.jpg" width="980" height="380" alt="轮播图1">
+				</div>
+			</div>
+			
+			<div class="banner" style="opacity: 0;">
+				<div class="banner-img">
+					<img src="images/james_clothes_04.jpg" width="980" height="380" alt="轮播图1">
+				</div>
+			</div>
+			
+			<div class="banner" style="opacity: 0;">
+				<div class="banner-img">
+					<img src="images/james_clothes_05.jpg" width="980" height="380" alt="轮播图1">
+				</div>
+			</div>
+			
+			<div class="tab">
+				<span class=""></span>
+				<span class="on"></span>
+				<span class=""></span>
+				<span class=""></span>
+				<span class=""></span>
+			</div>
+			
+			<div class="prev">
+			
+			</div>
+			<div class="next"></div>
+			</div>
+			<script>
+				var oBody = document.getElementsByTagName("body")[0];
+				var aBanner = document.getElementsByClassName("banner");
+				var aSpan = document.getElementsByClassName("tab")[0].getElementsByTagName("span");
+				var oNext = document.getElementsByClassName("next")[0];
+				var Oprev = document.getElementsByClassName("prev")[0];
+				var Oon = document.getElementsByClassName("on")[0];
+				aBanner[0].style.opacity = "1";
+				aSpan[0].className = "on";
+			
+				var num = 0;
+				for(var i = 0;i < aSpan.length;i++){
+					aSpan[i].index = i;
+					aSpan[i].onclick = function(){  //点击小圆点图片相对应的进行切换
+					for(var j = 0 ;j < aSpan.length; j++){
+						num = this.index;
+						aSpan[j].className = "";
+						aBanner[j].style.opacity = "0";
+					}
+					aSpan[num].className = "on";
+					aBanner[num].style.opacity = "1";
+				}
+				oNext.onclick = function(){//按下图片切换到后一张
+			  	for(var j = 0 ;j < aSpan.length; j++){
+			  		if(aSpan[j].className == "on"){
+						aSpan[j].className = "";
+						aBanner[j].style.opacity = "0";
+						j++;
+						num++;
+						if(j > 4){
+						j = 0;
+			  	}
+				aSpan[j].className = "on";
+				aBanner[j].style.opacity = "1";
+			}
+		}
+	}
+				Oprev.onclick = function(){  //按下图片切换到前一张
+			  	for(var j = 0 ;j < aSpan.length; j++){
+				if(aSpan[j].className == "on"){
+					aSpan[j].className = "";
+					aBanner[j].style.opacity = "0";
+					j--;
+					num--;
+					if(j < 0){
+						j = 4;
+				  	}
+					aSpan[j].className = "on";
+			  		aBanner[j].style.opacity = "1";
+			
+			  	}
+			}
+		}  
+	}
+				function Time(){/*设置定时器运行的函数*/
+					num++;
+					if(num < 5){
+						for(var j = 0 ;j < aSpan.length; j++){
+							aSpan[j].className = "";
+							aBanner[j].style.opacity = "0";
+						}
+						aSpan[num].className = "on";
+						aBanner[num].style.opacity = "1";
+					}else {
+						num = -1;
+					}         
+				}
+			clearInterval(timer);
+			var timer = setInterval("Time()",2000);/*调用定时器*/
+			
+			oBody.onmouseover = function(){/*鼠标引入，清除定时器，轮播图停止*/
+				clearInterval(timer);
+			};
+			oBody.onmouseout = function(){/*鼠标移出，重新调用定时器，轮播图开始*/
+				clearInterval(timer);
+				 timer = setInterval("Time()",2000);
+			};
+</script>
+
+		<div class="girlsOrange">
+			<div class="girlsWhite">
+				<ul class="one">
+					<li style="line-height: 169px; text-align: center;">
+						<img src="images/james_clothes_07.jpg" width="162" height="169">流行搭配
+					</li>
+					<li style="line-height: 137px; text-align: center;">
+						<img src="images/james_clothes_06.jpg" width="162" height="137">流行搭配
+					</li>
+				</ul>
+				
+				<ul class="two">
+					<li style="line-height: 117px; text-align: center;">
+						<img src="images/james_clothes_05.jpg" width="162" height="117">流行搭配
+					</li>
+
+					<li style="line-height: 188px; text-align: center;">
+						<img src="images/james_clothes_04.jpg" width="162" height="188">流行搭配
+					</li>
+				</ul>
+
+				<ul class="three">
+					<li style="line-height: 314px; text-align: center;">
+						<img src="images/james_clothes_03.jpg" width="205" height="314">流行搭配
+					</li>					
+				</ul>	
+			</div>
+		</div>
+
+		<span class="tidal">潮流前沿 / Tidal current</span>
+
+
+		<div class="cloth">
+			<table>
+				<tr>
+					<td>
+						<div class="decoration">
+							<img src="images/james_shoes_14.jpg" class="pic">
+							<span class="describtion">
+								詹姆斯14代
+							</span>
+
+							<span class="buyNow">
+								<img src="images/kuaimai.png" width="46" height="38">
+								快速购买通道
+							</span>
+						</div>
+					</td>
+					<td>
+						<div class="decoration">
+							<img src="images/james_shoes_15.jpg" class="pic">
+							<span class="describtion">
+								詹姆斯15代
+							</span>
+
+							<span class="buyNow">
+								<img src="images/kuaimai.png" width="46" height="38">
+								快速购买通道
+							</span>
+						</div>
+					</td>
+
+					<td>
+						<div class="decoration">
+							<img src="images/james_shoes_16.jpg" class="pic">
+							<span class="describtion">
+								詹姆斯16代
+							</span>
+
+							<span class="buyNow">
+								<img src="images/kuaimai.png" width="46" height="38">
+								快速购买通道
+							</span>
+						</div>
+					</td>
+
+					<td>
+						<div class="decoration">
+							<img src="images/james_shoes_17.jpeg" class="pic">
+							<span class="describtion">
+								詹姆斯17代
+							</span>
+
+							<span class="buyNow">
+								<img src="images/kuaimai.png" width="46" height="38">
+								快速购买通道
+							</span>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div class="footer">
+		<div class="content">
+			copyright &copy; 2020-2099 CHAOLIUFUSHIcom,ALL rights reversed.<br>
+			2001-2999,版权所有 创作不易，谢谢你的支持
+		</div>
+	</div>
+</body>
+
+</html>

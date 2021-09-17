@@ -1,0 +1,187 @@
+/*
+2020.12.22——2020.12.25
+遇到的问题：
+1. css文件中的图片路径是相对于当前的css文件
+2. 做一个同心圆： border-radius 让角有弧度
+3. 为边框设置渐变色: linear-gradient(direction, color1, color2 ...)
+    设置两个容器，外边的容器用渐变色填满，里面的容器用来存放元素
+4. 用 @keyframes 实现动画效果
+    用transform: scale(1.0); 和 transition: all 1s ease 0s;实现鼠标悬停的效果
+5. 列表在div里居中: disply: table
+6. 相对于父类元素进行定位：
+        父类元素用 position: relative;
+        子类元素用 position: absolute; 再根据需求设置 left, top, bottom, right等参数
+7. 鼠标悬浮在一个元素上显示另一个隐藏元素: 
+        A默认显示, B默认隐藏
+8. margin-top坍塌问题:
+    https://blog.csdn.net/weixin_46905764/article/details/105868648
+9. 开始时我想让鼠标悬浮在headpic上时，该元素会放大，但实际结果是：旁边的profile也会跟着放大，检查了
+    很久之后发现：profile的父元素是headpic而不是profile_card，并且其定位是absolute，所以headpic
+    放大，profile会跟着放大
+10. animation的执行难道还有顺序的吗？？若改变第99行代码的顺序，那么图片外环将会不会进行颜色的渐变
+*/
+*{
+    margin: 0px;
+    padding: 0px;
+    text-decoration: none;
+    list-style: none;
+}
+body{
+    height: 100vh;
+    background: black;
+    overflow: hidden;
+    background: url("../images/bg.jpg") center no-repeat;
+    background-size: cover;
+    display: flex;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+ul.nav_list li{
+    font-weight: 600;
+    font-size: 18px;
+    font-family: "Microsoft Yahei";
+    display: block;
+    height: 50px;
+    width: 120px;
+    margin-left: 30px;
+    line-height: 80px;
+    text-align: center;
+}
+.hoverable{
+  display:inline-block;
+  backface-visibility: hidden;
+  vertical-align: middle;
+  position:relative;
+  box-shadow: 0 0 1px rgba(0,0,0,0);
+  transform: translateZ(0);
+  transition-duration: .3s;
+  transition-property:transform;
+  color:rgb(128, 127, 127);
+}
+.hoverable:hover{
+  color: rgb(255, 255, 255);
+}
+.hoverable:before{
+  position:absolute;
+  pointer-events: none;
+  z-index:-1;
+  content: '';
+  top: 80%;
+  left: -25%;
+  height:10px;
+  width:150%;
+  opacity:0;
+  background: -webkit-radial-gradient(center, ellipse, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 80%);
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 80%);
+  transition-duration: 0.3s;
+  transition-property: transform, opacity;
+}
+.hoverable:hover, .hoverable:active, .hoverable:focus{
+  transform: translateY(-5px);
+}
+.hoverable:hover:before, .hoverable:active:before, .hoverable:focus:before{
+  opacity: 1;
+  transform: translateY(-5px);
+}
+div.profile_card{
+    width: 250px;
+    height: 310px;
+    background: rgba(52, 76, 119, 0.8);
+    margin: auto 40%;
+    padding: 30px 0;
+    border-radius: 15px;
+    position: absolute;
+    top: 25%;
+    text-align: center;
+}
+.profile_card .headpic{  /*头像外面*/
+    display: inline-block;
+    padding: 8px;
+    /* background:linear-gradient(to right, #1c4752,#31577a, rgb(58, 41, 134)); */
+    background: linear-gradient(130deg, #74b9ff, #e66767);
+    background-size: 200% 200%;
+    animation: animated-gradient 2s linear infinite;
+    border-radius:50%;
+    transform: scale(1.0);
+    transition: all 1s ease 0s;   
+}
+@keyframes animated-gradient{
+    25%{
+      background-position: left bottom;
+    }
+    50%{
+      background-position: right bottom;
+    }
+    75%{
+      background-position: right top;
+    }
+    100%{
+      background-position: left top;
+    }
+  }
+.headpic .pic{
+    display: block;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+.headpic:hover{
+    transform: scale(1.2);
+    transition: all 1s ease 0s;
+}
+.profile table{
+    border-collapse:collapse;
+    border-spacing:5px;
+    margin: 10px 0 0 -5px;
+}
+.profile table td{
+    text-align: center;
+    width: 150px;
+    height: 25px;
+    line-height: 25px;
+    color: azure;
+    font-size: 16px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.profile_card .name{
+    font-size: 25px;
+    color: white;
+    margin: auto;
+    margin-top: 20px;
+    display: block;
+    width: 50px;
+    text-align: center;
+    font-weight: bold;
+}
+.profile_card .motto{
+    font-size: 16px;
+    color: rgb(51, 152, 165);
+    margin: auto;
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+}
+.profile_card ul{
+    display: table;
+    margin: auto;
+}
+.profile_card ul li{
+    float: left;
+    margin-top: 10px;
+}
+.profile_card a.connect{
+    font-size: 20px;
+    color: rgb(51, 152, 165);
+    margin: auto;
+    margin-top: 30px;
+    display: block;
+    text-align: center;
+    line-height: 40px;
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+    border: solid 2px rgb(51, 152, 165);
+}
+.profile_card a.connect:hover{
+    background-color: rgb(51, 152, 165);
+    color: white;  
+}
